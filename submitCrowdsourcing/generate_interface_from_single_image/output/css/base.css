@@ -1,0 +1,28 @@
+div#container {
+	margin: 30px;
+}
+
+div#images-wrapper {
+	margin: 50px 0;
+}
+
+div#button-wrapper {
+	margin-bottom: 30px;
+}
+
+div.item {
+	border-style: solid;
+	border-color: black;
+}
+
+div.item.off {
+	border-color: black;
+}
+
+div.item.on {
+	border-color: red;
+}
+
+textarea#submission {
+	width: 500px;
+}

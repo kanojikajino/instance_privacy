@@ -1,0 +1,9 @@
+スクリプト：
+generate_html.py
+
+使いかた：
+python generate_html.py [画像URL] [クリック領域のサイズ（px)] [横のクリック領域数] [縦のクリック領域数] [枠の太さ]
+（例：python generate_html.py https://dl.dropboxusercontent.com/u/201468/instance_privacy_single_image/output/images/100_times_6.jpg 50 12 12 2）
+
+出力：
+output/htmls/ 以下にhtmlファイルが生成されます。

@@ -1,0 +1,7 @@
+*/html/*
+*.pyc
+*~
+*/doc/*
+*.DS_Store
+trash
+test
