@@ -228,10 +228,11 @@ def _save_mosaics(_save_dir, _mosaic_img_list):
     
     return 0
 
-def _save_parameters(_save_dir, _img_list, _mosaic_img_list, _subinstance_org_loc_list, _mosaic_loc_list):
+def _save_parameters(_save_dir, _args, _img_list, _mosaic_img_list, _subinstance_org_loc_list, _mosaic_loc_list):
     """ save parameters
     
     :Variables:
+        _args : Namespace
         _save_dir : str
         _img_list : list
         _mosaic_img_list : list
@@ -239,7 +240,7 @@ def _save_parameters(_save_dir, _img_list, _mosaic_img_list, _subinstance_org_lo
         _mosaic_loc_list : list
     """
     f = open(os.path.join(_save_dir, 'parameters.pickle'), 'w')
-    pickle.dump((_img_list, _mosaic_img_list, _subinstance_org_loc_list, _mosaic_loc_list), f)
+    pickle.dump((_args, _img_list, _mosaic_img_list, _subinstance_org_loc_list, _mosaic_loc_list), f)
     f.close()
     return 0
     
@@ -259,7 +260,7 @@ if __name__ == "__main__":
         exit(1)
     
     command_date = datetime.datetime.now().strftime(u'%Y/%m/%d %H:%M:%S')
-    _create_save_dir(args.save_dir, str(args.subinstance_size) + "_" + str(args.clickable_size) + "_" str(args.num_subinstances_to_combine))
+    _create_save_dir(args.save_dir, str(args.subinstance_size) + "_" + str(args.clickable_size) + "_" + str(args.num_subinstances_to_combine))
     save_path = os.path.join(args.save_dir, str(args.subinstance_size) + "_" + str(args.clickable_size) + "_" + str(args.num_subinstances_to_combine))
     print args
     print "Command was executed on " + command_date
@@ -270,4 +271,4 @@ if __name__ == "__main__":
     (subinstance_list, subinstance_org_loc_list) = _collect_subinstances(img_list, args.subinstance_size, args.clickable_size)
     (mosaic_img_list, mosaic_loc_list) = _combine_subinstances(subinstance_list, subinstance_org_loc_list, args.subinstance_size, args.clickable_size, args.num_subinstances_to_combine)
     _save_mosaics(save_path, mosaic_img_list)
-    _save_parameters(save_path, img_list, mosaic_img_list, subinstance_org_loc_list, mosaic_loc_list)
+    _save_parameters(save_path, args, img_list, mosaic_img_list, subinstance_org_loc_list, mosaic_loc_list)
