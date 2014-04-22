@@ -122,9 +122,9 @@ def _collect_subinstances(_img_list, _subinstance_size, _clickable_size):
     :RType: tuple of lists
     :Returns:
         _subinstance_list : list
-            a list of subinstances.
+            a list of subinstances divided into clickable areas (which we call sub-subinstance).
         _subinstance_org_loc_list : list
-            _subinstance_org_loc_list[i] = the original location of the i-th subinstance of _subinstance_list.
+            _subinstance_org_loc_list[i] = the original location of the i-th sub-subinstance of _subinstance_list.
     """
     num_files = len(_img_list)
     step_size = _subinstance_size / 2
@@ -141,9 +141,6 @@ def _collect_subinstances(_img_list, _subinstance_size, _clickable_size):
     
     _subinstance_list = [None] * expand * expand * num_subinstances
     _subinstance_org_loc_list = [None] * expand * expand * num_subinstances
-
-    ########## NEEDS CHECK ########################    
-    #exit(-1) #### check below
     
     patch_i = 0
     for i in range(num_files):
@@ -156,12 +153,9 @@ def _collect_subinstances(_img_list, _subinstance_size, _clickable_size):
                         try:
                             _subinstance_list[patch_i * expand * expand + l * expand + m ] = _img_list[i][step_size * j + l * _clickable_size : step_size * j + (l + 1) * _clickable_size,
                                                                                                           step_size * k + m * _clickable_size : step_size * k + (m + 1) * _clickable_size]
-                            #_subinstance_list[patch_i] = _img_list[i][step_size * j : step_size * j + _subinstance_size,
-                            #                                          step_size * k : step_size * k + _subinstance_size]
                         except IndexError:
                             sys.stdout.write("ERROR: images are not normalized.\n")
                             exit(0)
-                        #_subinstance_org_loc_list[patch_i] = (i, (step_size * j, step_size * k, _subinstance_size, _subinstance_size))
                         _subinstance_org_loc_list[patch_i * expand * expand + l * expand + m ] = (i, (step_size * j + l * _clickable_size, step_size * k + m * _clickable_size, _clickable_size, _clickable_size))
                 patch_i += 1
     
@@ -185,11 +179,9 @@ def _combine_subinstances(_subinstance_list, _subinstance_org_loc_list, _subinst
         _mosaic_img_list : list
             list of mosaics where each element corresponds to a mosaic in a numpy.array format.
         _mosaic_loc_list : list
-            _mosaic_loc_list[i] = the location of the i-th subinstance of _subinstance_list in _mosaic_img_list.
+            _mosaic_loc_list[i] = the location of the i-th sub-subinstance of _subinstance_list in _mosaic_img_list.
             In other words, _mosaic_loc_list and _subinstance_org_loc_list share the index set.
     """
-    #exit(-1)
-    ########## NEEDS CHECK ########################
     expand = (_subinstance_size / _clickable_size)
     num_subinstances = len(_subinstance_list) / (expand * expand)
     perm = np.random.permutation(num_subinstances)
@@ -213,47 +205,6 @@ def _combine_subinstances(_subinstance_list, _subinstance_org_loc_list, _subinst
                                                                                                            _subinstance_size * j + m * _clickable_size, 
                                                                                                            _clickable_size, 
                                                                                                            _clickable_size))
-                    patch_i += 1
-        _mosaic_img_list[file_i] = _mosaic_img
-
-    return (_mosaic_img_list, _mosaic_loc_list)
-
-def _combine_subinstances_backup(_subinstance_list, _subinstance_org_loc_list, _subinstance_size, _num_subinstances_to_combine):
-    """ combine subinstances to create a mosaic to crowdsource.
-    
-    :Variables:
-        _subinstance_list : list
-        _subinstance_org_loc_list : list
-        _subinstance_size : int
-        _num_subinstances_to_combine : int
-    :RType: tuple of lists
-    :Returns:
-        _mosaic_img_list : list
-            list of mosaics where each element corresponds to a mosaic in a numpy.array format.
-        _mosaic_loc_list : list
-            _mosaic_loc_list[i] = the location of the i-th subinstance of _subinstance_list in _mosaic_img_list.
-            In other words, _mosaic_loc_list and _subinstance_org_loc_list share the index set.
-    """
-    num_subinstances = len(_subinstance_list)
-    perm = np.random.permutation(num_subinstances)
-    
-    num_result_files = int(np.ceil(float(num_subinstances) / float(_num_subinstances_to_combine * _num_subinstances_to_combine)))
-    print "#(mosaics) =", num_result_files
-    
-    _mosaic_img_list = [None] * num_result_files
-    _mosaic_loc_list = [None] * num_subinstances
-    patch_i = 0
-    for file_i in range(num_result_files):
-        _mosaic_img = np.zeros((_subinstance_size * _num_subinstances_to_combine, _subinstance_size * _num_subinstances_to_combine, 3))
-        for i in range(_num_subinstances_to_combine):
-            for j in range(_num_subinstances_to_combine):
-                if patch_i < num_subinstances:
-                    _mosaic_img[i * _subinstance_size : i * _subinstance_size + _subinstance_size,
-                                j * _subinstance_size : j * _subinstance_size + _subinstance_size, :] = _subinstance_list[perm[patch_i]]
-                    _mosaic_loc_list[perm[patch_i]] = (file_i, (_subinstance_size * i, 
-                                                                _subinstance_size * j, 
-                                                                _subinstance_size, 
-                                                                _subinstance_size))
                     patch_i += 1
         _mosaic_img_list[file_i] = _mosaic_img
 
@@ -308,8 +259,8 @@ if __name__ == "__main__":
         exit(1)
     
     command_date = datetime.datetime.now().strftime(u'%Y/%m/%d %H:%M:%S')
-    _create_save_dir(args.save_dir, str(args.subinstance_size) + "_" + str(args.num_subinstances_to_combine))
-    save_path = os.path.join(args.save_dir, str(args.subinstance_size) + "_" + str(args.num_subinstances_to_combine))
+    _create_save_dir(args.save_dir, str(args.subinstance_size) + "_" + str(args.clickable_size) + "_" str(args.num_subinstances_to_combine))
+    save_path = os.path.join(args.save_dir, str(args.subinstance_size) + "_" + str(args.clickable_size) + "_" + str(args.num_subinstances_to_combine))
     print args
     print "Command was executed on " + command_date
     _write_log(save_path, args, True)
