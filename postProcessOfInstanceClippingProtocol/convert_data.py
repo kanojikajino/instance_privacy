@@ -29,9 +29,9 @@ result_array = array([ '46.899 06_07 07_07 10_16 10_17 11_16 11_17 12_22 13_22 1
 
 # metadata variables
 __author__ = "Hiroshi KAJINO <hiroshi.kajino.1989@gmail.com>"
-__date__ = "2013/12/13"
-__version__ = "0.1"
-__copyright__ = "Copyright (c) 2013 Hiroshi Kajino all rights reserved."
+__date__ = "2014/04/25"
+__version__ = "1.0"
+__copyright__ = "Copyright (c) 2014 Hiroshi Kajino all rights reserved."
 __docformat__ = "restructuredtext en"
 
 import numpy as np
