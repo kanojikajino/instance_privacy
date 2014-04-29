@@ -106,7 +106,7 @@ def _create_masked_image(_pos_ind_list, _img_list, _org_loc_list_without_repetit
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Draw results using converted_results.pickle and parameters.pickle.")
     parser.add_argument("parameters_file", type=str, help="parameters.pickle created by instance_clipping_and_mixing.py")
-    parser.add_argument("converted_result", type=str, help="lancers_result.pickle created by import-lancers-integrate-output.py")
+    parser.add_argument("converted_result", type=str, help="converted_result.pickle created by convert_data.py")
     parser.add_argument("quality_control", type=str, help="specify a quality control method from {no, mv, lc}.")
     parser.add_argument("save_dir", type=str, help="A directory to save clipped results and miscs.")
     args = parser.parse_args()

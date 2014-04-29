@@ -63,7 +63,7 @@ def _load_pickle_files(_file_str):
 def _save_parameters(_parameters, _save_dir):
     """ Save parameters into a pickle file.
     """
-    f = open(os.path.join(_save_dir, "converted_results.pickle"), "w")
+    f = open(os.path.join(_save_dir, "converted_result.pickle"), "w")
     pickle.dump(_parameters, f)
     f.close()
     return 0
@@ -90,7 +90,7 @@ def _convert_to_crowdData(_subinstance_size, _clickable_size, _num_instances_to_
     :Returns:
         (_org_loc_list_without_repetition, _converted_result_array)
         _org_loc_list_without_repetition : list
-            A list deleting repetitions in _subinstance_Org_loc_list.
+            A list deleting repetitions in _subinstance_org_loc_list.
     """
     _org_loc_list_without_repetition = list(set(_subinstance_org_loc_list))
     _converted_result_array = np.zeros((len(_org_loc_list_without_repetition), _result_array.shape[1]))
