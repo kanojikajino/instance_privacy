@@ -6,6 +6,7 @@ base_dir=$(cd ../test/100_50_5/ && pwd)"/"
 lancers_csv="lancers_task_download_data_test.csv"
 num_input="1"
 num_answer="1"
+quality_control="no"
 
 load_img_dir=$(cd ../test/resized_pics_small/ && pwd)"/"
 save_dir=$(cd ../test/ && pwd)"/"
@@ -23,4 +24,4 @@ python import-lancers-integrate-output.py ${base_dir}${lancers_csv} ${base_dir} 
 
 cd ../../2014/instance_privacy/postProcessOfInstanceClippingProtocol/
 python convert_data.py ${base_dir}"parameters.pickle" ${base_dir}"lancers_result.pickle" ${base_dir}
-
+python draw_results_using_converted_data.py ${base_dir}"parameters.pickle" ${base_dir}"converted_result.pickle" ${quality_control} ${base_dir}
