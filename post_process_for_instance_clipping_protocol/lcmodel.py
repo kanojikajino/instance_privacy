@@ -21,17 +21,17 @@ class LatentClassModel:
     :IVariables:
         data : crowdData.BinaryData
         log_mu : numpy.array
-            numpy.array of length I. mu = Pr[true_label = 1 | other variables].
+            numpy.array of length `num_instances`. mu = Pr[true_label = 1 | other variables].
         log_p : numpy.array
             numpy.array of length 2. p = Pr[true_label = 1]. The 1st element contains log(p), and the 2nd log(1-p).
         log_a : numpy.array
-            numpy.array of length I. intermediate variables to calculate log_p.
+            numpy.array of length `num_instances`. intermediate variables to calculate log_p.
         log_b : numpy.array
-            numpy.array of length I. intermediate variables to calculate log_p.
+            numpy.array of length `num_instances`. intermediate variables to calculate log_p.
         log_alpha : numpy.array
-            2 * J numpy.array. alpha_j = Pr[label_by_worker_j = 1 | true_label = 1]. The 1st row contains log(aloha), and the 2nd log(1-alpha).
+            2 * `num_workers` numpy.array. alpha_j = Pr[label_by_worker_j = 1 | true_label = 1]. The 1st row contains log(aloha), and the 2nd log(1-alpha).
         log_beta : numpy.array
-            numpy.array of length J. beta_j = Pr[label_by_worker_j = 0 | true_label = 0]. The 1st row contains log(beta), and the 2nd log(1-beta).
+            numpy.array of length `num_workers`. beta_j = Pr[label_by_worker_j = 0 | true_label = 0]. The 1st row contains log(beta), and the 2nd log(1-beta).
     """
     def __init__(self, crowd_data):
         self.data = crowd_data
@@ -39,30 +39,30 @@ class LatentClassModel:
         self.neg_ind = np.where(self.data.y == -1)
         self.log_mu = self.data.majority_vote("log_prob")
         self.log_p = np.zeros(2)
-        self.log_a = np.zeros(self.data.num_instance())
-        self.log_b = np.zeros(self.data.num_instance())
-        self.log_alpha = np.zeros((2, self.data.num_worker()))
-        self.log_beta = np.zeros((2, self.data.num_worker()))
+        self.log_a = np.zeros(self.data.num_instance)
+        self.log_b = np.zeros(self.data.num_instance)
+        self.log_alpha = np.zeros((2, self.data.num_workers))
+        self.log_beta = np.zeros((2, self.data.num_workers))
         self._m_step()
 
     def _e_step(self):
         """ Perform the E-step. I.e., update log_a, log_b, and log_mu.
         """
         self.log_a = np.sum((self.log_alpha[0, :] \
-                             * np.ones((self.data.num_instance(),
-                                        self.data.num_worker()))) \
+                             * np.ones((self.data.num_instance,
+                                        self.data.num_workers))) \
                             * (self.data.y == 1), axis=1)\
                      + np.sum((self.log_alpha[1, :] \
-                               * np.ones((self.data.num_instance(),
-                                          self.data.num_worker()))) \
+                               * np.ones((self.data.num_instance,
+                                          self.data.num_workers))) \
                               * (self.data.y == -1), axis=1)
         self.log_b = np.sum((self.log_beta[0, :] \
-                             * np.ones((self.data.num_instance(),
-                                        self.data.num_worker()))) \
+                             * np.ones((self.data.num_instance,
+                                        self.data.num_workers))) \
                             * (self.data.y == -1), axis=1)\
                      + np.sum((self.log_beta[1, :] \
-                               * np.ones((self.data.num_instance(),
-                                          self.data.num_worker()))) \
+                               * np.ones((self.data.num_instance,
+                                          self.data.num_workers))) \
                               * (self.data.y == 1), axis=1)
         self.log_mu[0, :] = self.log_p[0] + self.log_a
         self.log_mu[1, :] = self.log_p[1] + self.log_b
@@ -71,8 +71,8 @@ class LatentClassModel:
     def _m_step(self):
         """ Perform the M-step. I.e., update log_p, log_alpha, and log_beta.
         """
-        log_mu_ij = ((self.log_mu[0,:] * np.ones((self.data.num_worker(), self.data.num_instance()))).transpose())
-        log_one_minus_mu_ij = ((self.log_mu[1,:] * np.ones((self.data.num_worker(), self.data.num_instance()))).transpose())
+        log_mu_ij = ((self.log_mu[0,:] * np.ones((self.data.num_workers, self.data.num_instance))).transpose())
+        log_one_minus_mu_ij = ((self.log_mu[1,:] * np.ones((self.data.num_workers, self.data.num_instance))).transpose())
         alpha_log_denomi = sp.special.logsumexp(log_mu_ij, axis=0, b=(self.data.y != 0))
         alpha_log_nume_pos = sp.special.logsumexp(log_mu_ij, axis=0, b=(self.data.y == 1))
         alpha_log_nume_neg = sp.special.logsumexp(log_mu_ij, axis=0, b=(self.data.y == -1))
@@ -88,20 +88,20 @@ class LatentClassModel:
         """ Calculate the value of the Q-function on current estimates.
         """
         self.log_a = np.sum((self.log_alpha[0, :] \
-                             * np.ones((self.data.num_instance(),
-                                        self.data.num_worker()))) \
+                             * np.ones((self.data.num_instance,
+                                        self.data.num_workers))) \
                             * (self.data.y == 1), axis=1)\
                      + np.sum((self.log_alpha[1, :] \
-                               * np.ones((self.data.num_instance(),
-                                          self.data.num_worker()))) \
+                               * np.ones((self.data.num_instance,
+                                          self.data.num_workers))) \
                               * (self.data.y == -1), axis=1)
         self.log_b = np.sum((self.log_beta[0, :] \
-                             * np.ones((self.data.num_instance(),
-                                        self.data.num_worker()))) \
+                             * np.ones((self.data.num_instance,
+                                        self.data.num_workers))) \
                             * (self.data.y == -1), axis=1)\
                      + np.sum((self.log_beta[1, :] \
-                               * np.ones((self.data.num_instance(),
-                                          self.data.num_worker()))) \
+                               * np.ones((self.data.num_instance,
+                                          self.data.num_workers))) \
                               * (self.data.y == 1), axis=1)
         log_pa_pb = np.array([self.log_p[0] + (self.log_a), self.log_p[1] + (self.log_b)])
         return (np.exp(self.log_mu) * log_pa_pb).sum()
