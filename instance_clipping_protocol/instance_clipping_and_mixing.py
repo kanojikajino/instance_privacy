@@ -5,10 +5,10 @@ usage: python %s <load_img_folder/> <save_folder_name> <subinstance_size> <num_s
 REMARK:
     subinstance_size must be even.
 SAVE_FILES:
-    relation_between_org_and_shuffle.pickle : pickle file containing 
-    org.pickle : pickle version of list 'patch_org_loc_list'
+    relation_between_org_and_shuffle.pkl : pickle file containing 
+    org.pkl : pickle version of list 'patch_org_loc_list'
         the i-th element equals to (NAME_OF_ORIGINAL_FILE, (left-top-row, left-top-col, height, width))
-    shuffled.pickle : pickle version of list 'patch_shuffled_loc_list'
+    shuffled.pkl : pickle version of list 'patch_shuffled_loc_list'
         the i-th element equals to (NAME_OF_SHUFFLED_FILE, (row, column)) (NOTE: row and column are 0-origin)
     the i-th elements of both lists indicate the same object.
 """
@@ -230,7 +230,7 @@ def save_parameters(output_dir, args, img_list,
         subinstance_org_loc_list : list
         mosaic_loc_list : list
     """
-    f = open(os.path.join(output_dir, 'parameters.pickle'), 'wb')
+    f = open(os.path.join(output_dir, 'parameters.pkl'), 'wb')
     pickle.dump((args, img_list, subinstance_org_loc_list, mosaic_loc_list), f)
     f.close()
 
