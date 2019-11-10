@@ -15,10 +15,6 @@ import numpy as np
 import cv
 import pickle
 import sys
-import os
-import glob
-import re
-import os.path
 import argparse
 import datetime
 
@@ -59,7 +55,7 @@ def _convert_result_array_to_distribution(_converted_result_array, _smoothing_pa
     elif _possible_labels == "ten-choice":
         _possible_labels_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     else:
-        print "ERROR: _possible_labels must be either \"binary\" or \"ten-choice\"."
+        print("ERROR: _possible_labels must be either \"binary\" or \"ten-choice\".")
         exit(-1)
     _count_array = _smoothing_parameter * np.ones((_converted_result_array.shape[0], len(_possible_labels_list)))
     _non_zero_inds = np.nonzero(_converted_result_array)
@@ -83,7 +79,7 @@ def _align_result_array(_count_array_gt, _org_loc_list_without_repetition, _org_
         _aligned_count_array_gt
     """
     if len(_org_loc_list_without_repetition) != len(_org_loc_list_without_repetition_gt):
-        print "ERROR: the lengthes of lists are different, which invades the assumption made in this program."
+        print("ERROR: the lengthes of lists are different, which invades the assumption made in this program.")
         exit(-1)
     else:
         ind_list = [None] * len(_org_loc_list_without_repetition)
@@ -106,7 +102,7 @@ def _calc_information_loss(_count_array, _aligned_count_array_gt):
     :Returns:
     """
     if _count_array.shape != _aligned_count_array_gt.shape:
-        print "ERROR: inconsistent shapes."
+        print("ERROR: inconsistent shapes.")
         exit(-1)
     else:
         dist_sum = 0
@@ -182,9 +178,9 @@ if __name__ == "__main__":
     parser.add_argument("save_dir", type=str, help="A directory to save clipped results and miscs.")
     args = parser.parse_args()
     
-    command_date = datetime.datetime.now().strftime(u'%Y/%m/%d %H:%M:%S')
-    print args
-    print "Command was executed on " + command_date
+    command_date = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+    print(args)
+    print("Command was executed on " + command_date)
 
     (org_loc_list_without_repetition, converted_result_array) = _load_pickle_files(args.converted_result)
     (org_loc_list_without_repetition_gt, converted_result_array_gt) = _load_pickle_files(args.converted_result_ground_truth)
@@ -192,5 +188,5 @@ if __name__ == "__main__":
     count_array_gt = _convert_result_array_to_distribution(converted_result_array_gt, args.smoothing_parameter, args.possible_labels)
     aligned_count_array_gt = _align_result_array(count_array_gt, org_loc_list_without_repetition, org_loc_list_without_repetition_gt)
     information_loss = _calc_information_loss(count_array, aligned_count_array_gt)
-    print "information_loss =", information_loss
+    print("information_loss =", information_loss)
     exit(0)
