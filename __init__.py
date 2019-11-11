@@ -11,11 +11,3 @@ __version__ = "0.0.1"
 __copyright__ = "Copyright (c) 2013 Hiroshi Kajino all rights reserved."
 __docformat__ = "restructuredtext en"
 
-import dataStructure
-import qualityControl
-import instanceClippingProtocol
-import postProcessOfInstanceClippingProtocol
-import submitCrowdsourcing
-
-if __name__ == '__main__':
-    pass
