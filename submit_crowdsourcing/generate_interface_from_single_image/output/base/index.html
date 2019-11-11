@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>画像判別</title>
+    <title>Image annotation</title>
 
     <!-- Loading Bootstrap -->
     <link href="../Flat-UI-master/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -24,16 +24,17 @@
   <body>
   	<div id="container">
   		<div id="header">
-  			<h2>画像判別</h2>
+  			<h2>Image annotation</h2>
   			<ol>
-  				<li>「人の頭部」または「人の頭部の一部」が写っているマスをすべてクリックして、マスの枠を赤色にしてください。</li>
+  				<li>Please click ALL image squares that contain a part of a head so that their frames turn to red.</li>
   				<ul>
-  					<li>間違えてクリックした場合は、もういちどマスをクリックすると元に戻ります。</li>
-  					<li>「頭部」とは、人間の体のうち、首より上の部位とします。どんなに小さくても、頭部が写っているマスはクリックしてください。</li>
-					<li>帽子やメガネなどのアクセサリ類、後ろ姿、髪の毛、耳なども選択してください。</li>
+  					<li>You can unselect a square by clicking it again. Its frame should turn to black.</li>
+  					<li>A head is defined as the upper part of the human body, separated by a neck, not including a neck.</li>
+					<li>Please select every square, even if it contains a tiny fraction of a human head.</li>
+					<li>A head includes, for example, accesaries such as a hat, a cap, and glasses, hair, ears, and back views.</li>
   				</ul>
-  				<li>作業が完了したら「完了」ボタンを押してください</li>
-  				<li>完了ボタンを押すとテキストボックスに文字列が表示されます。表示された文字列をコピーし、ランサーズの回答画面にペーストしてください。</li>
+  				<li>When completed, please click the butten "Complete".</li>
+  				<li>Please copy the text shown in the text box, and submit it to the crowdsourcing platform.</li>
   			</ol>
   		</div>
   		<div id="main">
@@ -43,13 +44,13 @@
   		</div>
   		<div id="button-wrapper" class="row">
   			<div class="span3">
-  				<button id="submission-button" class="btn btn-large btn-block btn-primary" type="button">完了</button>
+  				<button id="submission-button" class="btn btn-large btn-block btn-primary" type="button">Complete</button>
   			</div>
   		</div>
   		<div id="textarea-wrapper">
   			<textarea id="submission" rows="5"></textarea>
   			<div id="message">
-  				<p>完了ボタンを押すと表示されるテキストボックス内の文字列を、ランサーズの作業画面に貼り付けてください</p>
+  				<p>Please copy the text shown in the text box, and submit it to the crowdsourcing platform.</p>
   				<p id="start" style="visibility:hidden;"></p>
   			</div>
   		</div>
