@@ -1,0 +1,2 @@
+Namespace(clickable_size=50, input_img_dir='../_test/input_images/', num_subinstances_to_combine=5, output_dir='../_test', subinstance_size=100)
+Command was executed on 2019/11/11 11:48:13
