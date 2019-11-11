@@ -12,7 +12,7 @@ __docformat__ = "restructuredtext en"
 import numpy as np
 import scipy as sp
 import sys
-from .crowd_data import BinaryData
+from crowd_data import BinaryData
 
 
 class LatentClassModel:

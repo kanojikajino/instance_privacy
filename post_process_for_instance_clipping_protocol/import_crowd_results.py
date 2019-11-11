@@ -56,7 +56,9 @@ def main():
     print("#(workers) =", len(worker_ids))
 
     # give IDs for instances
-    num_instances_in_line = (task_array.shape[1] - 3) / (args.num_input + args.num_answer)
+    if (task_array.shape[1] - 3) % (args.num_input + args.num_answer) != 0:
+        raise ValueError('incompatible parameters')
+    num_instances_in_line = (task_array.shape[1] - 3) // (args.num_input + args.num_answer)
     print('#(instances/task) =', num_instances_in_line)
     instance_ids = []
 

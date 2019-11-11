@@ -14,7 +14,7 @@ __docformat__ = "restructuredtext en"
 import numpy as np
 import argparse
 import datetime
-from .utils import load_pickle_files
+from utils import load_pickle_files
 
 #SMOOTH_VAL = 0.1
 

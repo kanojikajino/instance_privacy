@@ -43,7 +43,7 @@ import re
 import os.path
 import argparse
 import datetime
-from .utils import load_pickle_files
+from utils import load_pickle_files
 
 
 def convert_to_crowd_data(subinstance_size, clickable_size, num_instances_to_combine,
@@ -75,7 +75,6 @@ def convert_to_crowd_data(subinstance_size, clickable_size, num_instances_to_com
     converted_result_array = np.zeros((len(org_loc_list_without_repetition), result_array.shape[1]))
     
     # create a pos_labels & neg_labels that contain the ids of positive & negative instances
-    np.set_printoptions(threshold=np.nan)
     pat_space = re.compile(' ')
     pat_unsco = re.compile('_')
     pat_per = re.compile('\.')

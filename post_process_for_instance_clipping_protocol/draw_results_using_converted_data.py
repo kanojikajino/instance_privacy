@@ -16,8 +16,8 @@ import sys
 import os
 import argparse
 import datetime
-from .crowd_data import BinaryData
-from .lcmodel import LatentClassModel
+from crowd_data import BinaryData
+from lcmodel import LatentClassModel
 
 def load_pickle_files(_file_str):
     """ load parameters created by instance_clipping_and_mixing.py
@@ -54,10 +54,10 @@ def aggregate_crowd_labels(crowd_res, qc_method, save_dir=None):
     """
     if qc_method == "no":
         sys.stdout.write("--- No Quality Control ---\n")
-        pos_ind_list = list(set((crowd_res.y > 0).nonzero()[0]))
+        pos_ind_list = list(set((crowd_res.response_array > 0).nonzero()[0]))
     elif qc_method == "mv":
         sys.stdout.write("--- MV Method ---\n")
-        sum_y = crowd_res.y.sum(axis=1) #sum_y[i] = #(pos) - #(neg)
+        sum_y = crowd_res.response_array.sum(axis=1) #sum_y[i] = #(pos) - #(neg)
         pos_ind_list = []
         for i in range(len(sum_y)):
             if sum_y[i] > 0 or (sum_y[i] == 0 and np.random.binomial(1,0.5) == 0):
@@ -108,7 +108,7 @@ def main():
     print("Command was executed on " + command_date)
 
     org_loc_list_without_repetition, converted_result_array = load_pickle_files(args.converted_result)
-    args_ic, img_list, mosaic_img_list, subinstance_org_loc_list, mosaic_loc_list = load_pickle_files(args.parameters_file)
+    args_ic, img_list, subinstance_org_loc_list, mosaic_loc_list = load_pickle_files(args.parameters_file)
     crowd_res = BinaryData(converted_result_array)
     pos_ind_list = aggregate_crowd_labels(crowd_res, args.quality_control, args.save_dir)
     create_masked_image(pos_ind_list, img_list, org_loc_list_without_repetition, args.save_dir)

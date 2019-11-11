@@ -166,7 +166,7 @@ def collect_subinstances(img_list, subinstance_size, clickable_size):
     return subinstance_list, subinstance_org_loc_list
 
 
-def combine_subinstances(output_dir, subinstance_list, subinstance_size, clickable_size, num_subinstances_to_combine):
+def combine_subinstances(output_dir, subinstance_list, subinstance_size, clickable_size, num_subinstances_to_combine, seed=42):
     """ combine subinstances to create a mosaic to crowdsource.
 
     :Variables:
@@ -190,6 +190,7 @@ def combine_subinstances(output_dir, subinstance_list, subinstance_size, clickab
 
     expand = (subinstance_size // clickable_size)
     num_subinstances = len(subinstance_list) // (expand * expand)
+    np.random.seed(seed)
     perm = np.random.permutation(num_subinstances)
     
     num_result_files = int(np.ceil(float(num_subinstances) / float(num_subinstances_to_combine * num_subinstances_to_combine)))
