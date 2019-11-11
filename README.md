@@ -3,18 +3,21 @@ Instance-privacy preserving crowdsourcing
 
 This repository contains several programs for the paper "Instance-privacy preserving crowdsourcing", presented in the Second AAAI Conference on Human Computation and Crowdsourcing (HCOMP-14).
 
+## Author
+Hiroshi Kajino
+
 ## Demo
 
 ```bash
 cd instance_clipping_protocol
-python instance_clipping_and_mixing.py ../_test/input_images/ ../_test 100 50 5 # apply IC protocol to obtain mosaic images composed of subinstances
+python instance_clipping_and_mixing.py ../sample/input_images/ ../sample 100 50 5 # apply IC protocol to obtain mosaic images composed of subinstances
 cd ../submit_crowdsourcing
-sh generate_interface_wrapper.sh `cd "../_test/100_50_5/mosaics/"; pwd`/ `cd "../_test/100_50_5/mosaics/"; pwd`/ 50 10 10 `cd "../_test/100_50_5/"; pwd`/ # construct a web interface for annotation
+sh generate_interface_wrapper.sh `cd "../sample/100_50_5/mosaics/"; pwd`/ `cd "../sample/100_50_5/mosaics/"; pwd`/ 50 10 10 `cd "../sample/100_50_5/"; pwd`/ # construct a web interface for annotation
 # Run crowdsourcing here
 cd ../post_process_for_instance_clipping_protocol
-python import_crowd_results.py ../_test/crowdsourcing_result.csv ../_test/ 1 1 # convert results from crowdsourcing into pickle file
-python convert_data.py ../_test/100_50_5/parameters.pkl ../_test/workers_result.pickle ../_test/ # convert the pickle file into BinaryData defined in crowd_data.py
-python draw_results_using_converted_data.py ../_test/100_50_5/parameters.pkl ../_test/converted_result.pkl mv ../_test/ # draw masked images based on crowdsourced annotations.
+python import_crowd_results.py ../sample/crowdsourcing_result.csv ../sample/ 1 1 # convert results from crowdsourcing into pickle file
+python convert_data.py ../sample/100_50_5/parameters.pkl ../sample/workers_result.pickle ../sample/ # convert the pickle file into BinaryData defined in crowd_data.py
+python draw_results_using_converted_data.py ../sample/100_50_5/parameters.pkl ../sample/converted_result.pkl mv ../sample/ # draw masked images based on crowdsourced annotations.
 ```
 
 ## Details about scripts
@@ -103,3 +106,5 @@ This script implements the Dawind & Skene model proposed in 1979.
 
 #### `crowd_data.py`
 This script implements a data structure for binary responses from crowd workers.
+
+Copyright (c) 2014 Hiroshi Kajino all rights reserved.
