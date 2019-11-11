@@ -4,7 +4,7 @@
 import os
 import argparse
 import posixpath
-import urlparse 
+import urllib.parse 
 
 BASE_HTML_PATH = os.path.join('output', 'base', 'index.html')
 OUTPUT_HTML_DIR = os.path.join('output', 'htmls')
@@ -25,24 +25,25 @@ def main():
     generate(args.image_url, args.patch_size, args.num_col_images, args.num_row_images, args.border_width)
 
 def generate(image_url, patch_size, num_col_images, num_row_images, border_width):
+    width = (patch_size + 2 * border_width) * num_col_images
+    if width > WIDTH_LIMIT:
+        print('Warning: Interface width exceeds %d px' % (WIDTH_LIMIT))
+    
+    patch_htmls = []
+    for i in range(num_row_images):
+        for j in range(num_col_images):
+            patch_id = '%02d_%02d' % (i, j)
+            patch_htmls.append(PATCH_HTML % {'patch_id': patch_id, 'image_url': image_url, 'size': patch_size, 'border': border_width, 'top_position': patch_size*i, 'left_position': patch_size*j} )
 
-	width = (patch_size + 2 * border_width) * num_col_images
-	if width > WIDTH_LIMIT:
-		print 'Warning: Interface width exceeds %d px' % (WIDTH_LIMIT)
+    output_html_path = os.path.join(OUTPUT_HTML_DIR, '%s.%d.html' % (os.path.splitext(posixpath.basename(urllib.parse.urlsplit(image_url).path))[0], patch_size))
+    with open(BASE_HTML_PATH, 'r') as f:
+        html = f.read()
 
-	patch_htmls = []
-	for i in range(num_row_images):
-		for j in range(num_col_images):
-			patch_id = '%02d_%02d' % (i, j)
-			patch_htmls.append(PATCH_HTML % {'patch_id': patch_id, 'image_url': image_url, 'size': patch_size, 'border': border_width, 'top_position': patch_size*i, 'left_position': patch_size*j} )
+    html = html.replace('[SIZE]', str(patch_size)).replace('[WIDTH]', str(width)).replace('[BORDER]', str(border_width)).replace('[ITEMS]', '\n'.join(patch_htmls))
 
-	output_html_path = os.path.join(OUTPUT_HTML_DIR, '%s.%d.html' % (os.path.splitext(posixpath.basename(urlparse.urlsplit(image_url).path))[0], patch_size))
-	html = file(BASE_HTML_PATH, 'r').read()
-
-	html = html.replace('[SIZE]', str(patch_size)).replace('[WIDTH]', str(width)).replace('[BORDER]', str(border_width)).replace('[ITEMS]', '\n'.join(patch_htmls))
-
-	file(output_html_path, 'w').write(html)
-	return True
+    with open(output_html_path, 'w') as f:
+        f.write(html)
+    return True
 
 if __name__ == '__main__':
-	main()
+    main()
